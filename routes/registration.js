@@ -3,8 +3,8 @@ const sha1 = require('sha1');
 
 module.exports = function(req, res) {
     const user = new User({
-        login: req.body.login,
-        email: req.body.email,
+        login: req.body.login.toLowerCase(),
+        email: req.body.email.toLowerCase(),
         password: sha1(req.body.password),
         playlists: []
     });
@@ -13,7 +13,7 @@ module.exports = function(req, res) {
         const response = {
             success: true,
             msg: 'user was registrated',
-            cookies: sha1(req.body.password)
+            cookies: user._id
         }
         res.send(response);
     }, (e) => {
