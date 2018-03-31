@@ -7,6 +7,8 @@ const registration = require('./routes/registration');
 const createPlaylist = require('./routes/createPlaylist');
 const auth = require('./routes/auth');
 const config = require('./config');
+const checkEmail = require('./routes/checkEmail');
+const checkLogin = require('./routes/checkLogin');
 
 const app = express();
 const port = 3000;
@@ -22,6 +24,8 @@ mongoose.connect(config.database).then(() => console.log('connected'), (e) => co
 
 app.post('/user/reg', registration);
 app.post('/user/auth', auth);
+app.get('/user/checkEmail/:email', checkEmail);
+app.get('/user/checkLogin/:login', checkLogin);
 
 app.post('/playlist/create', createPlaylist);
 
