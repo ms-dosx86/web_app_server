@@ -2,7 +2,7 @@ const User = require('../models/user').UserModel;
 const sha1 = require('sha1');
 
 module.exports = function(req, res) {
-    User.findOne({ login: req.body.login, password: sha1(req.body.password) }, (err, user) => {
+    User.findOne({ login: req.body.login.toLowerCase(), password: sha1(req.body.password) }, (err, user) => {
         if (err) {
             throw err;
         }
