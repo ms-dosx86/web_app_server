@@ -6,6 +6,7 @@ module.exports = function(req, res) {
         login: req.body.login.toLowerCase(),
         email: req.body.email.toLowerCase(),
         password: sha1(req.body.password),
+        img: '',
         playlists: []
     });
     user.save().then(() => {
