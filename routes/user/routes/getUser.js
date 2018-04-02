@@ -1,7 +1,7 @@
 const User = require('../../../models/user').UserModel;
 
 module.exports = (req, res) => {
-    User.findById(req.body._id, (err, user) => {
+    User.findById(req.params.id, (err, user) => {
         if (err) {
             throw err;
         }
