@@ -2,17 +2,18 @@ const User = require('../../../models/user').UserModel;
 const Playlist = require('../../../models/playlist').PlaylistModel;
 
 module.exports = function(req, res) {
-    User.findOne( { password: req.body.id }, (err, user) => {
+    User.findById(req.body.id, (err, user) => {
         if (err) {
             throw err;
         }
         if (user) {
+            const plylist = req.body.playlist;
             const playlist = new Playlist({
-                title: req.body.playlist.title,
-                description: req.body.playlist.description,
-                img: req.body.playlist.img,
-                tags: req.body.playlist.tags,
-                list: req.body.playlist.list
+                title: plylist.title,
+                description: plylist.description,
+                img: plylist.img,
+                tags: plylist.tags,
+                list: plylist.list
             });
             playlist.save().then(() => {
                 console.log('плекйлист был создан');
@@ -31,7 +32,7 @@ module.exports = function(req, res) {
                         mas: 'playlist wasnt added'
                     }
                     res.send(response);
-                });
+                }, (e) => console.log('ошибка при сохранении плейлиста'));
             });
         }
     })
