@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const formidable = require('formidable');
 //зависимости 2
 const config = require('./config');
 const user = require('./routes/user/user_route');
