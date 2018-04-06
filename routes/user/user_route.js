@@ -13,5 +13,4 @@ router.get('/checkEmail/:email', checkEmail);
 router.get('/checkLogin/:login', checkLogin);
 router.get('/getUser/:id', getUser);
 router.get('/getSettings/:id');
-
 module.exports = router;
