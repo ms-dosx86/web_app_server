@@ -9,6 +9,8 @@ async function Start() {
         const config = require('./config');
         const user = require('./routes/user/user_route');
         const playlist = require('./routes/playlist/playlist_route');
+        const search = require('./routes/search/search_route');
+        
         //переменные
         const app = express();
         const port = 3000;
@@ -17,8 +19,10 @@ async function Start() {
         app.use(bodyParser.json());
         app.use('/user', user);
         app.use('/playlist', playlist);
+        app.use('/search', search);
         //подключение к бд
-        await mongoose.connect(config.database).then(() => console.log('connected'));
+        await mongoose.connect(config.database);
+        console.log('connected')
         await app.listen(port);
         console.log(port + ' is listened');
     } catch(e) {
