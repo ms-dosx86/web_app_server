@@ -11,6 +11,10 @@ module.exports = async (req, res) => {
         params.searchList.params.q = req.params.query;
         authorize(credentials, params, res);
     } catch (e) {
-        console.log(e.message);
+        const response = {
+            success: false,
+            mas: e.message
+        }
+        res.send(response);
     }
 }
