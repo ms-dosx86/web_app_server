@@ -11,7 +11,8 @@ const PlaylistSchema = new mongoose.Schema({
             img: String,
             duration: String,
             viewCount: String,
-            id: String
+            id: String,
+            description: String
         }
     ],
     tags: [String]
