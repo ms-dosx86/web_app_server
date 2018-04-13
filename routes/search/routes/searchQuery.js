@@ -9,6 +9,7 @@ module.exports = async (req, res) => {
         let credentials = await readFile('client_secret.json');
         credentials = JSON.parse(credentials);
         params.searchList.params.q = req.params.query;
+        params.searchList.params.pageToken = req.params.token;
         authorize(credentials, params, res);
     } catch (e) {
         const response = {
