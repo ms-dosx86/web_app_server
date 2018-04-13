@@ -4,7 +4,8 @@ module.exports = {
             'maxResults': '25',
             'part': 'snippet',
             'q': '',
-            'type': 'video' 
+            'type': 'video' ,
+            'pageToken': ''
         }
     },
     videos: {
