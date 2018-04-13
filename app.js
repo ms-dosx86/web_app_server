@@ -22,7 +22,7 @@ async function Start() {
         app.use('/search', search);
         //подключение к бд
         await mongoose.connect(config.database);
-        console.log('connected')
+        console.log('connected');
         await app.listen(port);
         console.log(port + ' is listened');
     } catch(e) {

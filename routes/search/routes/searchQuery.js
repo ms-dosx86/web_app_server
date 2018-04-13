@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     } catch (e) {
         const response = {
             success: false,
-            mas: e.message
+            msg: e.message
         }
         res.send(response);
     }
