@@ -50,6 +50,7 @@ module.exports = async (credentials, params, res) => {
                         body: {
                             nextPageToken: result.nextPageToken,
                             prevPageToken: result.prevPageToken,
+                            pagesCount: (result.pageInfo.totalResults/result.pageInfo.resultsPerPage).toFixed(),
                             videos: videos
                         }
                     }
@@ -68,6 +69,7 @@ module.exports = async (credentials, params, res) => {
                 body: {
                     nextPageToken: result.nextPageToken,
                     prevPageToken: result.prevPageToken,
+                    pagesCount: (result.pageInfo.totalResults/result.pageInfo.resultsPerPage).toFixed(),
                     videos: videos
                 }
             }
