@@ -3,7 +3,6 @@ const Playlist = require('../../../models/playlist').PlaylistModel;
 
 module.exports = async (req, res) => {
     try {
-        console.log(req.params);
         let user = await User.findById(req.params.id);
         if (user === null) throw new Error('нет такого пользователя');
         const response = {
