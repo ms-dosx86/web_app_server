@@ -1,3 +1,4 @@
 module.exports = {
-    database: 'mongodb://localhost/web_app'
+    database: 'mongodb://localhost/web_app',
+    path: __dirname
 }
