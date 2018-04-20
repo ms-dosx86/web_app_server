@@ -1,5 +1,9 @@
 const User = require('../../../models/user').UserModel;
 const sha1 = require('sha1');
+const fs = require('fs');
+const path = require('../../../config').path;
+const util = require('util');
+fs.mkdir = util.promisify(fs.mkdir);
 
 module.exports = async (req, res) => {
     try {
@@ -13,6 +17,10 @@ module.exports = async (req, res) => {
         await user.save()
             .catch(e => { throw new Error('ошибка при сохранении юзера'); });
         console.log('user is saved');
+        await fs.mkdir(path + '/files/users/' + user._id);
+        await fs.mkdir(path + '/files/users/' + user._id + '/images');
+        await fs.mkdir(path + '/files/users/' + user._id + '/images/avatar');
+        await fs.mkdir(path + '/files/users/' + user._id + '/images/playlists');
         const response = {
             success: true,
             msg: 'user was registrated',
