@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
         if (user === null) throw new Error(`юзер не был найден`);
         const response = {
             success: true,
-            msg: 'юзер был авторизован',
+            msg: 'юзер найден',
             cookies: user._id
         }
         res.send(response);
