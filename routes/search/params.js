@@ -1,7 +1,7 @@
 module.exports = {
     searchList: {
         'params': {
-            'maxResults': '25',
+            'maxResults': '10',
             'part': 'snippet',
             'q': '',
             'type': 'video' ,
