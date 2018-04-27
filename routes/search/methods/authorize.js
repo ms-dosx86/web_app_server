@@ -8,12 +8,13 @@ const TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
 const TOKEN_PATH = TOKEN_DIR + 'api.json';
 const getSearchListByKeyword = require('./getSearchListByKeyword');
 const getVideosByIds = require('./getVideosByIds');
+const getVideo = require('./getVideo');
 
 fs.readFile = util.promisify(fs.readFile);
 fs.mkdir = util.promisify(fs.mkdir);
 fs.writeFile = util.promisify(fs.writeFile);
 
-module.exports = async (credentials, params, res) => {
+module.exports = async (credentials, params, res, type) => {
     try {
         let clientSecret = credentials.installed.client_secret;
         let clientId = credentials.installed.client_id;
@@ -40,40 +41,69 @@ module.exports = async (credentials, params, res) => {
                     console.log('Token stored to ' + TOKEN_PATH);
                     token = await fs.readFile(TOKEN_PATH);
                     oauth2Client.credentials = JSON.parse(token.toString('utf8'));
-                    let result = await getSearchListByKeyword(oauth2Client, params.searchList);
-                    let ids = result.items.map(item => item.id.videoId);
-                    params.videos.params.id = ids.join();
-                    let videos = await getVideosByIds(oauth2Client, params.videos);
-                    const response = {
-                        success: true,
-                        msg: 'данные были получены',
-                        body: {
-                            nextPageToken: result.nextPageToken,
-                            prevPageToken: result.prevPageToken,
-                            pagesCount: (result.pageInfo.totalResults/result.pageInfo.resultsPerPage).toFixed(),
-                            videos: videos
-                        }
+                    switch (type) {
+                        case 'list':
+                            let result = await getSearchListByKeyword(oauth2Client, params.searchList);
+                            let ids = result.items.map(item => item.id.videoId);
+                            params.videos.params.id = ids.join();
+                            let videos = await getVideosByIds(oauth2Client, params.videos);
+                            const response = {
+                                success: true,
+                                msg: 'данные были получены',
+                                body: {
+                                    nextPageToken: result.nextPageToken,
+                                    prevPageToken: result.prevPageToken,
+                                    pagesCount: (result.pageInfo.totalResults/result.pageInfo.resultsPerPage).toFixed(),
+                                    videos: videos
+                                }
+                            }
+                            res.send(response);
+                            break;
+                        case 'video':
+                            let video = await getVideo(oauth2Client, params.videos);
+                            response = {
+                                success: true,
+                                msg: 'данные были получены',
+                                body: video
+                            }
+                            res.send(response);
+                            break;
                     }
-                    res.send(videos);
+                    
                 });
             })
         } else {
             oauth2Client.credentials = JSON.parse(token);
-            let result = await getSearchListByKeyword(oauth2Client, params.searchList);
-            let ids = result.items.map(item => item.id.videoId);
-            params.videos.params.id = ids.join();
-            let videos = await getVideosByIds(oauth2Client, params.videos);
-            const response = {
-                success: true,
-                msg: 'данные были получены',
-                body: {
-                    nextPageToken: result.nextPageToken,
-                    prevPageToken: result.prevPageToken,
-                    pagesCount: (result.pageInfo.totalResults/result.pageInfo.resultsPerPage).toFixed(),
-                    videos: videos
-                }
+            if (type == 'list') {
+                console.log('suks');
             }
-            res.send(response);
+            const response = {};
+            switch (type) {
+                case 'list':
+                    let result = await getSearchListByKeyword(oauth2Client, params.searchList);
+                    console.log('object');
+                    let ids = result.items.map(item => item.id.videoId);
+                    params.videos.params.id = ids.join();
+                    let videos = await getVideosByIds(oauth2Client, params.videos);
+                    response.success = true;
+                    response.msg = 'данные были получены';
+                    response.body = {
+                        nextPageToken: result.nextPageToken,
+                        prevPageToken: result.prevPageToken,
+                        pagesCount: (result.pageInfo.totalResults/result.pageInfo.resultsPerPage).toFixed(),
+                        videos: videos
+                    }
+                    res.send(videos);
+                    break;
+                case 'video':
+                    console.log('check');
+                    let video = await getVideo(oauth2Client, params.videos);
+                    response.success = true;
+                    response.msg = 'данные были получены';
+                    response.body = video;
+                    res.send(response);
+                    break;
+            }
         }
     } catch (e) {
         const response = {
