@@ -6,7 +6,7 @@ const update = require('./routes/update');
 const deletePlaylist = require('./routes/delete');
 
 router.post('/create', create);
-router.get('/get/:id', get);
+router.get('/:id', get);
 router.post('/update', update);
 router.get('/delete/:userid/:playid', deletePlaylist);
 
