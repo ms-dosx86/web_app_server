@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
         credentials = JSON.parse(credentials);
         params.searchList.params.q = req.params.query;
         params.searchList.params.pageToken = req.params.token;
-        authorize(credentials, params, res);
+        authorize(credentials, params, res, 'list');
     } catch (e) {
         const response = {
             success: false,
