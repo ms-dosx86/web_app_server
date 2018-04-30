@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Tag = require('./tag').TagSchema;
 
 const PlaylistSchema = new mongoose.Schema({
     title: String,
@@ -15,7 +16,11 @@ const PlaylistSchema = new mongoose.Schema({
             description: String
         }
     ],
-    tags: [String]
+    tags: [Tag],
+    viewCount: {
+        type: Number,
+        default: 0
+    }
 });
 
 module.exports.PlaylistSchema = PlaylistSchema;
