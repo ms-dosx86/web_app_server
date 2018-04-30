@@ -5,11 +5,13 @@
         const bodyParser = require('body-parser');
         const cors = require('cors');
         const mongoose = require('mongoose');
+        const path = require('path');
         //зависимости 2
         const config = require('./config');
         const user = require('./routes/user/user_route');
         const playlist = require('./routes/playlist/playlist_route');
         const search = require('./routes/search/search_route');
+        const tag = require('./routes/tag/tag_route');
         //переменные
         const app = express();
         const port = 3000;
@@ -17,6 +19,9 @@
         app.use(cors());
         app.use(bodyParser.urlencoded({ extended: false }));
         app.use(bodyParser.json());
+        app.use('/api/image/default', express.static(path.join(__dirname, '/defaults')))
+        app.use('/api/image/custom', express.static(path.join(__dirname, '/files/users/')))
+        app.use('/api/tag', tag);
         app.use('/api/user', user);
         app.use('/api/playlist', playlist);
         app.use('/api/search', search);
