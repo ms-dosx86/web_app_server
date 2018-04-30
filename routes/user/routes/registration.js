@@ -11,16 +11,19 @@ module.exports = async (req, res) => {
             login: req.body.login.toLowerCase(),
             email: req.body.email.toLowerCase(),
             password: sha1(req.body.password),
-            img: '',
+            img: 'avatar.jpg',
             playlists: []
         });
-        await user.save()
-            .catch(e => { throw new Error('ошибка при сохранении юзера'); });
-        console.log('user is saved');
         await fs.mkdir(path + '/files/users/' + user._id);
         await fs.mkdir(path + '/files/users/' + user._id + '/images');
         await fs.mkdir(path + '/files/users/' + user._id + '/images/avatar');
         await fs.mkdir(path + '/files/users/' + user._id + '/images/playlists');
+        let from = path + '/defaults/avatar_default.jpg';
+        let to = path + '/files/users/' + user._id + '/images/avatar/' + 'avatar.jpg';
+        await fs.copyFile(from, to);
+        await user.save()
+            .catch(e => { throw new Error('ошибка при сохранении юзера'); });
+        console.log(`${user.login} is saved`);
         const response = {
             success: true,
             msg: 'user was registrated',
