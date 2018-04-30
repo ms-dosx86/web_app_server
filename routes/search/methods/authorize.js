@@ -74,14 +74,10 @@ module.exports = async (credentials, params, res, type) => {
             })
         } else {
             oauth2Client.credentials = JSON.parse(token);
-            if (type == 'list') {
-                console.log('suks');
-            }
             const response = {};
             switch (type) {
                 case 'list':
                     let result = await getSearchListByKeyword(oauth2Client, params.searchList);
-                    console.log('object');
                     let ids = result.items.map(item => item.id.videoId);
                     params.videos.params.id = ids.join();
                     let videos = await getVideosByIds(oauth2Client, params.videos);
@@ -93,15 +89,16 @@ module.exports = async (credentials, params, res, type) => {
                         pagesCount: (result.pageInfo.totalResults/result.pageInfo.resultsPerPage).toFixed(),
                         videos: videos
                     }
-                    res.send(videos);
+                    res.send(response);
                     break;
                 case 'video':
-                    console.log('check');
                     let video = await getVideo(oauth2Client, params.videos);
                     response.success = true;
                     response.msg = 'данные были получены';
                     response.body = video;
                     res.send(response);
+                    break;
+                default:
                     break;
             }
         }
