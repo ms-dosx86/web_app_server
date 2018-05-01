@@ -20,7 +20,8 @@ const PlaylistSchema = new mongoose.Schema({
     viewCount: {
         type: Number,
         default: 0
-    }
+    },
+    creator: String
 });
 
 module.exports.PlaylistSchema = PlaylistSchema;
