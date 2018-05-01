@@ -5,6 +5,7 @@ const formidable = require('formidable');
 const path = require('../../../config').path;
 const fs = require('fs');
 const util = require('util');
+const sharp = require('sharp');
 fs.mkdir = util.promisify(fs.mkdir);
 fs.rename = util.promisify(fs.rename);
 fs.readFile = util.promisify(fs.readFile);
@@ -15,11 +16,10 @@ module.exports = async (req, res) => {
         let form = new formidable.IncomingForm();
         form.parse(req, async (err, fields, files) => {
             if (err) throw err;
-            console.log(fields)
             if (fields.playlist === 'undefined') {
                 const response = {
                     success: false,
-                    msg: 'plalist was undefined'
+                    msg: 'playlist was undefined'
                 }
                 res.send(response);
             } else {
@@ -45,7 +45,6 @@ module.exports = async (req, res) => {
                 const playlist = new Playlist({
                     title: plylist.title.toLowerCase(),
                     description: plylist.description.toLowerCase(),
-                    img: '',
                     tags: tags,
                     list: plylist.tracks
                 });
@@ -54,17 +53,22 @@ module.exports = async (req, res) => {
                 console.log('плекйлист был создан');
                 if (typeof files.img == 'undefined') {
                     let from = path + '/defaults/default.jpg';
-                    let to = path + '/files/users/' + fields.id + '/images/playlists/' + playlist._id + '.jpg';
+                    let to = path + '/files/images/playlists/' + playlist._id + '.jpg';
                     await fs.copyFile(from, to);
-                    playlist.img = playlist._id + '.jpg';
                 } else {
+                    console.log('object');
                     let type = '';
                     files.img.type == 'image/png' ? type = '.png' : type = '.jpg';
+                    console.log(type);
                     let oldpath = files.img.path;
-                    let newpath = path + '/files/users/' + fields.id + '/images/playlists/' + playlist._id + type;
+                    let newpath = path + '/files/temp/' + playlist._id + type;
                     await fs.rename(oldpath, newpath);
-                    playlist.img = playlist._id + type;
+                    console.log('was moved to temp');
+                    let img = await sharp(path + '/files/temp/' + playlist._id + type);
+                    let i = await img.resize(500, 500).toFile(path + '/files/images/playlists/' + playlist._id + type);
+                    console.log(`img was resized`)                    
                 }
+                playlist.img = playlist._id + '.jpg';
                 await playlist.save()
                     .catch(e => { throw new Error('ошибка при сохранении плейлиста'); });
                 console.log('плекйлист был перезаписан');  
