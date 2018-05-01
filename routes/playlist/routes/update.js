@@ -12,8 +12,6 @@ module.exports = async (req, res) => {
         form.parse(req, async (err, fields, files) => {
             if (err) throw err;
             fields.playlist = JSON.parse(fields.playlist);
-            console.log(fields)
-            console.log(files)
             let user = await User.findById(fields.id);
             if (user === null) throw new Error('user not found');
             let pl1 = await Playlist.findById(fields.playlist._id);
