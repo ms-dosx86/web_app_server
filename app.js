@@ -20,7 +20,8 @@
         app.use(bodyParser.urlencoded({ extended: false }));
         app.use(bodyParser.json());
         app.use('/api/image/default', express.static(path.join(__dirname, '/defaults')))
-        app.use('/api/image/custom', express.static(path.join(__dirname, '/files/users/')))
+        app.use('/api/image/playlist', express.static(path.join(__dirname, '/files/images/playlists')))
+        app.use('/api/image/avatar', express.static(path.join(__dirname, '/files/images/avatars')))
         app.use('/api/tag', tag);
         app.use('/api/user', user);
         app.use('/api/playlist', playlist);
