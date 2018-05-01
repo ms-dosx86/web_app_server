@@ -7,11 +7,7 @@ module.exports = async (req, res) => {
         const response = {
             success: true,
             msg: 'ok',
-            body: {
-                tags: [],
-                pl: [],
-                p: []
-            }
+            body: []
         }
         let pl = [];
         for (let i = 0; i < playlists.length; i++) { //playlists
@@ -44,16 +40,13 @@ module.exports = async (req, res) => {
                 p[c - 1].push(pl[i]);
             }
         }
-
-        // for (let i = 0; i < p.length; i++) {
-        //     for (let j = 0; j < p[i].length; j++) {
-        //         for ()
-        //     }
-        // }
-
-        response.body.tags = tags;
-        response.body.pl = pl;
-        response.body.p = p;
+        for (let i = 0; i < p.length; i++) {
+            p[i].sort((a, b) => b.viewCount - a.viewCount);
+        }
+        let ps = [];
+        p.reverse();
+        p.forEach(item => {ps = ps.concat(item)})
+        response.body = ps;
         res.send(response);
     } catch (e) {
         const response = {
