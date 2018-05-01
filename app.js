@@ -27,8 +27,8 @@
         app.use('/api/playlist', playlist);
         app.use('/api/search', search);
         //подключение к бд
-        // await mongoose.connect(config.database);
-        // console.log('connected');
+        await mongoose.connect(config.database);
+        console.log('connected');
         await app.listen(port);
         console.log(port + ' is listened');
     } catch(e) {

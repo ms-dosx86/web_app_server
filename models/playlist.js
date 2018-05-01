@@ -21,7 +21,10 @@ const PlaylistSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    creator: String
+    creator: {
+        name: String,
+        img: String
+    }
 });
 
 module.exports.PlaylistSchema = PlaylistSchema;
