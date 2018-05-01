@@ -46,7 +46,8 @@ module.exports = async (req, res) => {
                     title: plylist.title.toLowerCase(),
                     description: plylist.description.toLowerCase(),
                     tags: tags,
-                    list: plylist.tracks
+                    list: plylist.tracks,
+                    creator: fields.id
                 });
                 await playlist.save()
                     .catch(e => { throw new Error('ошибка при сохранении плейлиста'); });
