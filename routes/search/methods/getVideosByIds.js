@@ -16,7 +16,7 @@ module.exports = async (oauth2Client, videoParams) => {
         video.title = result.items[i].snippet.title;
         video.id = result.items[i].id;
         video.description = result.items[i].snippet.description;
-        video.img = result.items[i].snippet.thumbnails.default.url;
+        video.img = result.items[i].snippet.thumbnails.high.url;
         video.duration = formatDuration(result.items[i].contentDetails.duration);
         video.viewCount = formatViews(result.items[i].statistics.viewCount);
         videos.push(video);
