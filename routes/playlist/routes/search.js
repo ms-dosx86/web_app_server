@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
             for (let j = 0; j < playlists[i].tags.length; j++) { //tags of playlists
                 let flag = false;
                 for (let k = 0; k < tags.length; k++) { //tags from client
-                    if (playlists[i].tags[j].name === tags[k].name) {
+                    if (playlists[i].tags[j].name === tags[k]) {
                         pl.push(playlists[i]);
                         flag = true;
                         break;
@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
             let c = 0;
             for (let j = 0; j < pl[i].tags.length; j++) {
                 for (let k = 0; k < tags.length; k++) {
-                    if (pl[i].tags[j].name === tags[k].name) {
+                    if (pl[i].tags[j].name === tags[k]) {
                         c++;
                         break;
                     }
