@@ -12,6 +12,7 @@
         const playlist = require('./routes/playlist/playlist_route');
         const search = require('./routes/search/search_route');
         const tag = require('./routes/tag/tag_route');
+        const home = require('./routes/home/home_route');
         //переменные
         const app = express();
         const port = 3000;
@@ -26,6 +27,7 @@
         app.use('/api/user', user);
         app.use('/api/playlist', playlist);
         app.use('/api/search', search);
+        app.use('/api/home', home);
         //подключение к бд
         await mongoose.connect(config.database);
         console.log('connected');
