@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
         if (user.playlists) {
             let i = user.playlists.length - page*10 - 1;
             pages = (user.playlists.length / 10).toFixed();
-            while (playlists.length < 10 && i > 0) {
+            while (playlists.length < 10 && i >= 0) {
                 playlists.push(user.playlists[i]);
                 i--;
             } 
