@@ -8,6 +8,7 @@ const getUser = require('./routes/getUser');
 const getSettings = require('./routes/getSettings');
 const getPlaylists = require('./routes/getPlaylists');
 const getAll = require('./routes/getAll');
+const getFavs = require('./routes/getFavs');
 
 router.post('/reg', registration);
 router.post('/auth', auth);
@@ -15,6 +16,7 @@ router.get('/checkEmail/:email', checkEmail);
 router.get('/checkLogin/:login', checkLogin);
 router.get('/getUser/:id', getUser);
 router.get('/getSettings/:id', getSettings);
-router.get('/getPlaylists/:id', getPlaylists);
+router.get('/getPlaylists/:id/:page', getPlaylists);
 router.get('/getAll', getAll);
+router.get('/getFavs/:id/:page', getFavs);
 module.exports = router;
