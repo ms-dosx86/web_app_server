@@ -76,6 +76,7 @@ module.exports = async (req, res) => {
                     .catch(e => { throw new Error('ошибка при сохранении плейлиста'); });
                 console.log('плекйлист был перезаписан');  
                 user.playlists.push(playlist);
+                console.log(user);
                 await user.save()
                     .catch(e => { throw new Error('ошибка при добавлении плейлиста в список'); });
                 console.log('playlist was added');
