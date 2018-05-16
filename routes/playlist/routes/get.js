@@ -3,7 +3,7 @@ const Playlist = require('../../../models/playlist').PlaylistModel;
 module.exports = async (req, res) => {
     try {
         let playlist = await Playlist.findById(req.params.id);
-        playlist.viewCount++;
+        req.params.view && playlist.viewCount++;
         await playlist.save();
         const response = {
             success: true,
