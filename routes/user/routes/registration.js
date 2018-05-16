@@ -12,7 +12,8 @@ module.exports = async (req, res) => {
             email: req.body.email.toLowerCase(),
             password: sha1(req.body.password),
             img: '',
-            playlists: []
+            playlists: [],
+            favs: []
         });
         let from = path + '/defaults/avatar_default.jpg';
         let to = path + '/files/images/avatars/' + user._id + '.jpg';
