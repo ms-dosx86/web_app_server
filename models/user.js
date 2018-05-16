@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
-const playlist = require('./playlist').PlaylistSchema;
+const Playlist = require('./playlist').PlaylistSchema;
 
 const UserSchema = new mongoose.Schema({
     login: String,
     email: String,
     password: String,
     img: String,
-    playlists: [playlist]
+    playlists: [Playlist],
+    favs: [Playlist]
 });
 
 module.exports.UserSchema = UserSchema;
