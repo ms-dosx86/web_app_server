@@ -3,11 +3,12 @@ const Playlist = require('../../../models/playlist').PlaylistModel;
 module.exports = async (req, res) => {
     try {
         let tags = req.body;
+        let page = req.params.page;
         let playlists = await Playlist.find({});
-        const response = {
+        let response = {
             success: true,
             msg: 'ok',
-            body: []
+            body: {}
         }
         let pl = [];
         for (let i = 0; i < playlists.length; i++) { //playlists
@@ -45,8 +46,24 @@ module.exports = async (req, res) => {
         }
         let ps = [];
         p.reverse();
-        p.forEach(item => {ps = ps.concat(item)})
-        response.body = ps;
+        p.forEach(item => {ps = ps.concat(item)});
+        let pages = 0;
+        playlists = [];
+        let i = 0;
+        if (ps.length > 10) {
+            i = ps.length - page*10 - 1;
+        } else {
+            i = ps.length - 1;
+        }
+        console.log(i, ps.length);
+        pages = (ps.length / 10).toFixed();
+        while (playlists.length < 10 && i >= 0) {
+            playlists.push(ps[i]);
+            i--;
+        }
+        response.body.playlists = playlists;
+        response.body.allPages = pages;
+        response.body.count = ps.length;
         res.send(response);
     } catch (e) {
         const response = {
