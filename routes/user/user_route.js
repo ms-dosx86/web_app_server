@@ -12,6 +12,7 @@ const getFavs = require('./routes/getFavs');
 const updateLogin = require('./routes/updateLogin');
 const updateEmail = require('./routes/updateEmail');
 const updateStatus = require('./routes/updateStatus');
+const getUserByLogin = require('./routes/getUserByLogin');
 
 router.post('/reg', registration);
 router.post('/auth', auth);
@@ -25,4 +26,5 @@ router.get('/getFavs/:id/:page', getFavs);
 router.post('/updateLogin', updateLogin);
 router.post('/updateEmail', updateEmail);
 router.post('/updateStatus', updateStatus);
+router.get('/getUserByLogin/:login', getUserByLogin);
 module.exports = router;
