@@ -9,6 +9,9 @@ const getSettings = require('./routes/getSettings');
 const getPlaylists = require('./routes/getPlaylists');
 const getAll = require('./routes/getAll');
 const getFavs = require('./routes/getFavs');
+const updateLogin = require('./routes/updateLogin');
+const updateEmail = require('./routes/updateEmail');
+const updateStatus = require('./routes/updateStatus');
 
 router.post('/reg', registration);
 router.post('/auth', auth);
@@ -19,4 +22,7 @@ router.get('/getSettings/:id', getSettings);
 router.get('/getPlaylists/:id/:page', getPlaylists);
 router.get('/getAll', getAll);
 router.get('/getFavs/:id/:page', getFavs);
+router.post('/updateLogin', updateLogin);
+router.post('/updateEmail', updateEmail);
+router.post('/updateStatus', updateStatus);
 module.exports = router;
