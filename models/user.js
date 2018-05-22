@@ -5,6 +5,10 @@ const UserSchema = new mongoose.Schema({
     login: String,
     email: String,
     password: String,
+    status: {
+        type: String,
+        default: 'I am gsounds\' user'
+    },
     img: String,
     playlists: [Playlist],
     favs: [Playlist]
