@@ -5,6 +5,7 @@ const UserSchema = new mongoose.Schema({
     login: String,
     email: String,
     password: String,
+    salt: String,
     status: {
         type: String,
         default: 'I am gsounds\' user'
