@@ -4,7 +4,7 @@ const TagSchema = new mongoose.Schema({
     name: String,
     count: {
         type: Number,
-        default: 0
+        default: 1
     }
 });
 
