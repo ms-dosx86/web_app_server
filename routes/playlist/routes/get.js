@@ -3,8 +3,10 @@ const Playlist = require('../../../models/playlist').PlaylistModel;
 module.exports = async (req, res) => {
     try {
         let playlist = await Playlist.findById(req.params.id);
-        req.params.view && playlist.viewCount++;
-        await playlist.save();
+        if (req.params.view === 'true') {
+            playlist.viewCount++;
+            await playlist.save();
+        }
         const response = {
             success: true,
             msg: 'плейлист найден',
