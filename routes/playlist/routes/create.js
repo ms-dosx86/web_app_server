@@ -62,7 +62,6 @@ module.exports = async (req, res) => {
                 } else {
                     let type = '';
                     files.img.type == 'image/png' ? type = '.png' : type = '.jpg';
-                    console.log(type);
                     let oldpath = files.img.path;
                     let newpath = path + '/files/temp/' + playlist._id + type;
                     await fs.copyFile(oldpath, newpath);
