@@ -8,6 +8,8 @@
         const path = require('path');
         const clean_dir = require('./functions/clean_dir');
         const fs = require('fs');
+        const logger = require('./functions/logger');
+        const path_to_logs = require('./config').path_to_logs;
 
         //зависимости 2
         const config = require('./config');
@@ -20,7 +22,6 @@
         const app = express();
         const port = 3000;
 
-        
         //middleware
         app.use(cors());
         app.use(bodyParser.urlencoded({ extended: false }));
@@ -41,10 +42,10 @@
         await clean_dir(__dirname + '/files/temp');
         //connect to db
         await mongoose.connect(config.database);
-        console.log('connected');
+        logger(path_to_logs, 'connected to database');
         await app.listen(port);
-        console.log(port + ' is listened');
+        logger(path_to_logs, 'port ' + port + ' is listened');
     } catch(e) {
-        console.log(e);
+        logger(path_to_logs, 'ERROR: ' + e.message);
     }
 })();
