@@ -7,7 +7,7 @@
         const mongoose = require('mongoose');
         const path = require('path');
         const clean_dir = require('./functions/clean_dir');
-        const write = require('./functions/write_file');
+        const fs = require('fs');
 
         //зависимости 2
         const config = require('./config');
@@ -34,7 +34,9 @@
         app.use('/api/search', search);
         app.use('/api/home', home);
         //clean logs
-        write('logs.txt', '').then(() => console.log('ok'));
+        fs.writeFile('logs.txt', '', err => {
+            if (err) throw err;
+        })
         //clean temp files
         await clean_dir(__dirname + '/files/temp');
         //connect to db
