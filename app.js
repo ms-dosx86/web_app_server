@@ -10,6 +10,7 @@
         const fs = require('fs');
         const logger = require('./functions/logger');
         const path_to_logs = require('./config').path_to_logs;
+        const path_to_err_logs = require('./config').path_to_err_logs;
 
         //зависимости 2
         const config = require('./config');
@@ -37,7 +38,7 @@
         //clean logs
         fs.writeFile('logs/logs.txt', '', err => {
             if (err) throw err;
-        })
+        });
         //clean temp files
         await clean_dir(__dirname + '/files/temp');
         //connect to db
@@ -45,7 +46,8 @@
         logger(path_to_logs, 'connected to database');
         await app.listen(port);
         logger(path_to_logs, 'port ' + port + ' is listened');
+        console.log('now server is running');
     } catch(e) {
-        logger(path_to_logs, 'ERROR: ' + e.message);
+        logger(path_to_err_logs, e.message);
     }
 })();
