@@ -7,7 +7,7 @@ fs.unlink = util.promisify(fs.unlink);
 
 module.exports = async path => {
     try {
-        let files = await fs.readdir(path).catch(e => { throw e });
+        let files = await fs.readdir(path);
         if (files.length > 0) {
             files.forEach(async file => {
                 await fs.unlink(path + '/' + file);
