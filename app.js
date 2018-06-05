@@ -35,7 +35,7 @@
         app.use('/api/search', search);
         app.use('/api/home', home);
         //clean logs
-        fs.writeFile('logs.txt', '', err => {
+        fs.writeFile('logs/logs.txt', '', err => {
             if (err) throw err;
         })
         //clean temp files
