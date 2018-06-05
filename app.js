@@ -6,6 +6,9 @@
         const cors = require('cors');
         const mongoose = require('mongoose');
         const path = require('path');
+        const clean_dir = require('./functions/clean_dir');
+        const write = require('./functions/write_file');
+
         //зависимости 2
         const config = require('./config');
         const user = require('./routes/user/user_route');
@@ -16,6 +19,8 @@
         //переменные
         const app = express();
         const port = 3000;
+
+        
         //middleware
         app.use(cors());
         app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,7 +33,11 @@
         app.use('/api/playlist', playlist);
         app.use('/api/search', search);
         app.use('/api/home', home);
-        //подключение к бд
+        //clean logs
+        write('logs.txt', '').then(() => console.log('ok'));
+        //clean temp files
+        await clean_dir(__dirname + '/files/temp');
+        //connect to db
         await mongoose.connect(config.database);
         console.log('connected');
         await app.listen(port);
