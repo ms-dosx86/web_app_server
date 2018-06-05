@@ -1,6 +1,9 @@
 const fs = require('fs');
-module.exports = (path, data) => {
-    return new Promise(resolve => {
-        fs.writeFile(path, data, resolve);
+module.exports = async (path, data) => {
+    return new Promise((resolve, reject) => {
+        fs.writeFile(path, data, err => {
+            if (err) reject(err);
+            resolve();
+        });
     })
 }
