@@ -5,8 +5,11 @@ const path = require('../../../config').path;
 const fs = require('fs');
 const util = require('util');
 const sharp = require('sharp');
+const logger = require('../../../functions/logger');
+const path_to_logs = require('../../../config').path_to_logs;
 fs.copyFile = util.promisify(fs.copyFile);
 fs.unlink = util.promisify(fs.unlink);
+fs.readdir = util.promisify(fs.readdir);
 
 function findIndexById(id, arr) {
     for (let i = 0; i < arr.length; i++) {
@@ -23,8 +26,15 @@ function existsAsync(path) {
     });
 }
 
+function resize(image, width, height, path) {
+    return new Promise((resolve, reject) => {
+        sharp(image).resize(width, height).toFile(path).then(resolve).catch(reject);
+    });
+}
+
 module.exports = async (req, res) => {
     try {
+        logger(path_to_logs, '----------------------------PLAYLIST UPDATING--------------------------');
         let form = new formidable.IncomingForm();
         form.parse(req, async (err, fields, files) => {
             if (err) throw err;
@@ -42,32 +52,44 @@ module.exports = async (req, res) => {
                         }
                     }
                     if (files.img) {
-                        let prevImg = path + '/files/images/playlists/' + playlist.img;
-                        let prevTempImg = path + '/files/temp/' + playlist.img;
-                        let exists = await existsAsync(prevImg);
-                        exists && await fs.unlink(prevImg);
-                        exists = await existsAsync(prevTempImg);
-                        exists && await fs.unlink(prevTempImg);
-                        let type;
-                        files.img.type = 'image/png' ? type = '.png' : type = '.jpg';
+                        let filesInTemp = await fs.readdir(path + '/files/temp');
+                        filesInTemp.forEach(async file => {
+                            let re = new RegExp('^' + playlist._id);
+                            if (re.test(file)) {
+                                await fs.unlink(path + '/files/temp/' + file);
+                                logger(path_to_logs, 'prev image was deleted from /files/temp');
+                                return;
+                            }
+                        });
+                        let filesPlaylists = await fs.readdir(path + '/files/images/playlists');
+                        filesPlaylists.forEach(async file => {
+                            let re = new RegExp('^' + playlist._id);
+                            if (re.test(file)) {
+                                await fs.unlink(path + '/files/images/playlists/' + file);
+                                logger(path_to_logs, 'prev image ' + '/files/images/playlists/' + file + ' was deleted from images');
+                                return;
+                            }
+                        })
+                        let type = '.' + files.img.type.replace(/^image\//i, '');
                         let oldpath = files.img.path;
                         let newpath = path + '/files/temp/' + playlist._id + type;
                         await fs.copyFile(oldpath, newpath);
-                        console.log('image was moved to temp');
-                        let img = await sharp(path + '/files/temp/' + playlist._id + type);
-                        let i = await img.resize(500, 500).toFile(path + '/files/images/playlists/' + playlist._id + type);
-                        console.log('image was resized');
+                        logger(path_to_logs, 'image was moved to temp');
+                        await resize(path + '/files/temp/' + playlist._id + type, 500, 500, path + '/files/images/playlists/' + playlist._id + type);
+                        logger(path_to_logs, 'image was resized');
                         playlist.img = playlist._id + type;
                         user.playlists[index]['img'] = playlist._id + type;
                     }
                     await playlist.save();
                     await user.save();
-                    console.log('playlist was updated');
+                    logger(path_to_logs, 'playlist was updated');
                     const response = {
                         success: true,
                         msg: 'playlist was updated'
                     }
                     res.send(response);
+                    logger(path_to_logs, '----------------------------PLAYLIST UPDATING FINISHED--------------------------');
+
                 } else {
                     throw new Error('playlist not found');
                 }
@@ -82,5 +104,6 @@ module.exports = async (req, res) => {
             msg: e.message
         }
         res.send(response);
+        logger(path_to_logs, 'ERROR: ' + e.message);
     }
 }
