@@ -12,7 +12,11 @@ const UserSchema = new mongoose.Schema({
     },
     img: String,
     playlists: [Playlist],
-    favs: [Playlist]
+    favs: [Playlist],
+    admin: {
+        type: Boolean,
+        default: false
+    }
 });
 
 module.exports.UserSchema = UserSchema;

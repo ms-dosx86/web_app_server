@@ -9,6 +9,9 @@ const TOKEN_PATH = TOKEN_DIR + 'api.json';
 const getSearchListByKeyword = require('./getSearchListByKeyword');
 const getVideosByIds = require('./getVideosByIds');
 const getVideo = require('./getVideo');
+const logger = require('../../../functions/logger');
+const path_to_err_logs = require('../../../config').path_to_err_logs;
+const path_to_logs = require('../../../config').path_to_logs;
 
 fs.readFile = util.promisify(fs.readFile);
 fs.mkdir = util.promisify(fs.mkdir);
@@ -38,7 +41,7 @@ module.exports = async (credentials, params, res, type) => {
                     if (err) throw err;
                     await fs.mkdir(TOKEN_DIR);
                     await fs.writeFile(TOKEN_PATH, JSON.stringify(token1));
-                    console.log('Token stored to ' + TOKEN_PATH);
+                    logger(path_to_logs, 'Token stored to ' + TOKEN_PATH);
                     token = await fs.readFile(TOKEN_PATH);
                     oauth2Client.credentials = JSON.parse(token.toString('utf8'));
                     switch (type) {
@@ -58,6 +61,7 @@ module.exports = async (credentials, params, res, type) => {
                                 }
                             }
                             res.send(response);
+                            logger(path_to_logs, '-----------------------------GETTING VIDEOS IS FINISHED-------------------------');
                             break;
                         case 'video':
                             let video = await getVideo(oauth2Client, params.videos);
@@ -67,6 +71,7 @@ module.exports = async (credentials, params, res, type) => {
                                 body: video
                             }
                             res.send(response);
+                            logger(path_to_logs, '-----------------------------GETTING VIDEO IS FINISHED-------------------------');
                             break;
                     }
                     
@@ -90,6 +95,7 @@ module.exports = async (credentials, params, res, type) => {
                         videos: videos
                     }
                     res.send(response);
+                    logger(path_to_logs, '-----------------------------GETTING VIDEOS IS FINISHED-------------------------');
                     break;
                 case 'video':
                     let video = await getVideo(oauth2Client, params.videos);
@@ -97,6 +103,7 @@ module.exports = async (credentials, params, res, type) => {
                     response.msg = 'данные были получены';
                     response.body = video;
                     res.send(response);
+                    logger(path_to_logs, '-----------------------------GETTING VIDEO IS FINISHED-------------------------');
                     break;
                 default:
                     break;
@@ -108,6 +115,8 @@ module.exports = async (credentials, params, res, type) => {
             msg: e.message
         }
         res.send(response);
+        logger(path_to_err_logs, 'ERROR WITH GETTING VIDEO ' + e.message);
+        logger(path_to_logs, '-----------------------------GETTING VIDEO IS CRASHED-------------------------');
     }
     
 }

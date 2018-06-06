@@ -6,6 +6,9 @@ const path = require('../../../config').path;
 const fs = require('fs');
 const util = require('util');
 const sharp = require('sharp');
+const logger = require('../../../functions/logger');
+const path_to_err_logs = require('../../../config').path_to_err_logs;
+const path_to_logs = require('../../../config').path_to_logs;
 fs.mkdir = util.promisify(fs.mkdir);
 fs.rename = util.promisify(fs.rename);
 fs.readFile = util.promisify(fs.readFile);
@@ -13,6 +16,7 @@ fs.copyFile = util.promisify(fs.copyFile);
 
 module.exports = async (req, res) => {
     try {
+        logger(path_to_logs, '-----------------------------CREATING PLAYLIST-------------------------');
         let form = new formidable.IncomingForm();
         form.parse(req, async (err, fields, files) => {
             if (err) throw err;
@@ -22,6 +26,8 @@ module.exports = async (req, res) => {
                     msg: 'playlist was undefined'
                 }
                 res.send(response);
+                logger(path_to_err_logs, 'ERROR WITH CREATING PLAYLIST: ' + e.message);
+                logger(path_to_logs, '-----------------------------CREATING PLAYLIST IS CRASHED-------------------------');
             } else {
                 fields.playlist = JSON.parse(fields.playlist);
                 let user = await User.findById(fields.id);
@@ -54,7 +60,7 @@ module.exports = async (req, res) => {
                 });
                 await playlist.save()
                     .catch(e => { throw new Error('ошибка при сохранении плейлиста'); });
-                console.log('плекйлист был создан');
+                logger(path_to_logs, 'playlist was created');
                 if (typeof files.img == 'undefined') {
                     let from = path + '/defaults/default.jpg';
                     let to = path + '/files/images/playlists/' + playlist._id + '.jpg';
@@ -65,24 +71,25 @@ module.exports = async (req, res) => {
                     let oldpath = files.img.path;
                     let newpath = path + '/files/temp/' + playlist._id + type;
                     await fs.copyFile(oldpath, newpath);
-                    console.log('was moved to temp');
+                    logger(path_to_logs, 'image was moved to temp');
                     let img = await sharp(path + '/files/temp/' + playlist._id + type);
                     let i = await img.resize(500, 500).toFile(path + '/files/images/playlists/' + playlist._id + type);
-                    console.log(`img was resized`)                    
+                    logger(path_to_logs, 'image was reszied');                  
                 }
                 playlist.img = playlist._id + '.jpg';
                 await playlist.save()
                     .catch(e => { throw new Error('ошибка при сохранении плейлиста'); });
-                console.log('плекйлист был перезаписан');  
+                logger(path_to_logs, 'playlist was rewritten');
                 user.playlists.push(playlist);
                 await user.save()
                     .catch(e => { throw new Error('ошибка при добавлении плейлиста в список'); });
-                console.log('playlist was added');
+                logger(path_to_logs, 'playlist was added');
                 const response = {
                     success: true,
                     msg: 'playlist was created'
                 }
                 res.send(response);
+                logger(path_to_logs, '-----------------------------CREATING PLAYLIST IS FINISHED-------------------------');
             }
         })
     } catch (e) {
@@ -91,5 +98,7 @@ module.exports = async (req, res) => {
             msg: e.message
         }
         res.send(response);
+        logger(path_to_err_logs, 'ERROR WITH CREATING PLAYLIST: ' + e.message);
+        logger(path_to_logs, '-----------------------------CREATING PLAYLIST IS CRASHED-------------------------');
     }
 }

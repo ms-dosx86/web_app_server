@@ -1,8 +1,11 @@
 const User = require('../../../models/user').UserModel;
 const Playlist = require('../../../models/playlist').PlaylistModel;
+const logger = require('../../../functions/logger');
+const path_to_err_logs = require('../../../config').path_to_err_logs;
 
 module.exports = async (req, res) => {
     try {
+        logger(path_to_logs, '-----------------------------GETTING USERS\' PLAYLISTS-------------------------');
         let user = await User.findById(req.params.id);
         if (user === null) throw new Error('нет такого пользователя');
         let page = req.params.page;
@@ -25,12 +28,15 @@ module.exports = async (req, res) => {
             }
         }
         res.send(response);
+        logger(path_to_logs, '-----------------------------GETTING USERS\' PLAYLISTS IS FINISHED-------------------------');
     } catch (e) {
         const response = {
             success: false,
             msg: e.message
         }
         res.send(response);
+        logger(path_to_err_logs, 'ERROR WITH GETTING USERS\' PLAYLISTS: ' + e.message);
+        logger(path_to_logs, '-----------------------------GETTING USERS\' PLAYLISTS IS CRASHED-------------------------');
     }
     
 

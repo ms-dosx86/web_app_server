@@ -1,7 +1,11 @@
 const Playlist = require('../../../models/playlist').PlaylistModel;
+const logger = require('../../../functions/logger');
+const path_to_err_logs = require('../../../config').path_to_err_logs;
+const path_to_logs = require('../../../config').path_to_logs;
 
 module.exports = async (req, res) => {
     try {
+        logger(path_to_logs, '-----------------------------SEARCHING PLAYLISTS-------------------------');
         let tags = req.body;
         let page = req.params.page;
         let playlists = await Playlist.find({});
@@ -55,7 +59,6 @@ module.exports = async (req, res) => {
         } else {
             i = ps.length - 1;
         }
-        console.log(i, ps.length);
         pages = (ps.length / 10).toFixed();
         while (playlists.length < 10 && i >= 0) {
             playlists.push(ps[i]);
@@ -65,11 +68,14 @@ module.exports = async (req, res) => {
         response.body.allPages = pages;
         response.body.count = ps.length;
         res.send(response);
+        logger(path_to_logs, '-----------------------------SEARCHING PLAYLISTS IS FINISHED-------------------------');
     } catch (e) {
         const response = {
             success: false,
             msg: e.message
         }
         res.send(response);
+        logger(path_to_err_logs, 'ERROR WITH SEARCHING PLAYLISTS: ' + e.message);
+        logger(path_to_logs, '-----------------------------SEARCHING PLAYLISTS IS CRASHED-------------------------');
     }
 }

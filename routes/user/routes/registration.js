@@ -4,6 +4,9 @@ const fs = require('fs');
 const path = require('../../../config').path;
 const util = require('util');
 const crypto = require('crypto');
+const logger = require('../../../functions/logger');
+const path_to_err_logs = require('../../../config').path_to_err_logs;
+const path_to_logs = require('../../../config').path_to_logs;
 fs.mkdir = util.promisify(fs.mkdir);
 fs.copyFile = util.promisify(fs.copyFile);
 
@@ -15,6 +18,7 @@ function exists(path) {
 
 module.exports = async (req, res) => {
     try {
+        logger(path_to_logs, '-----------------------------REGISTRATION-------------------------');
         const salt = crypto.randomBytes(32).toString('hex');
         const user = new User({
             login: req.body.login.toLowerCase(),
@@ -38,18 +42,21 @@ module.exports = async (req, res) => {
         await fs.copyFile(from, to);
         user.img = user._id + '.jpg';
         await user.save().catch(e => { throw new Error('ошибка при сохранении юзера'); });
-        console.log(`${user.login} is saved`);
+        logger(path_to_logs, `${user.login} is saved`);
         const response = {
             success: true,
             msg: 'user was registrated',
             cookies: user._id
         }
         res.send(response);
+        logger(path_to_logs, '-----------------------------REGISTRATION IS FINISHED-------------------------');
     } catch (e) {
         const response = {
             success: false,
             msg: e.message
         }
         res.send(response);
+        logger(path_to_err_logs, 'ERROR WITH REGISTRATION: ' + e.message);
+        logger(path_to_logs, '-----------------------------REGISTRATION IS CRASHED-------------------------');
     }
 }

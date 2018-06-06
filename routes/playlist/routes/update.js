@@ -7,6 +7,7 @@ const util = require('util');
 const sharp = require('sharp');
 const logger = require('../../../functions/logger');
 const path_to_logs = require('../../../config').path_to_logs;
+const path_to_err_logs = require('../../../config').path_to_err_logs;
 fs.copyFile = util.promisify(fs.copyFile);
 fs.unlink = util.promisify(fs.unlink);
 fs.readdir = util.promisify(fs.readdir);
@@ -34,7 +35,7 @@ function resize(image, width, height, path) {
 
 module.exports = async (req, res) => {
     try {
-        logger(path_to_logs, '----------------------------PLAYLIST UPDATING--------------------------');
+        logger(path_to_logs, '----------------------------UPDATING PLAYLIST--------------------------');
         let form = new formidable.IncomingForm();
         form.parse(req, async (err, fields, files) => {
             if (err) throw err;
@@ -88,7 +89,7 @@ module.exports = async (req, res) => {
                         msg: 'playlist was updated'
                     }
                     res.send(response);
-                    logger(path_to_logs, '----------------------------PLAYLIST UPDATING FINISHED--------------------------');
+                    logger(path_to_logs, '----------------------------UPDATING PLAYLIST IS  FINISHED--------------------------');
 
                 } else {
                     throw new Error('playlist not found');
@@ -104,6 +105,7 @@ module.exports = async (req, res) => {
             msg: e.message
         }
         res.send(response);
-        logger(path_to_logs, 'ERROR: ' + e.message);
+        logger(path_to_err_logs, 'ERROR WITH UPDATING PLAYLIST: ' + e.message);
+        logger(path_to_logs, '----------------------------UPDATING PLAYLIST IS CRASHED--------------------------');
     }
 }

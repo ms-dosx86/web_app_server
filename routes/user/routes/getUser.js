@@ -1,7 +1,10 @@
 const User = require('../../../models/user').UserModel;
+const logger = require('../../../functions/logger');
+const path_to_err_logs = require('../../../config').path_to_err_logs;
 
 module.exports = async (req, res) => {
     try {
+        logger(path_to_logs, '-----------------------------GET USER-------------------------');
         const user = await User.findById(req.params.id);
         if (user === null) throw new Error(`пользователь не был найден`);
         let usr = {
@@ -17,11 +20,14 @@ module.exports = async (req, res) => {
             body: usr
         }
         res.send(response);
+        logger(path_to_logs, '-----------------------------GET USER IS FINISHED-------------------------');
     } catch (e) {
         const response = {
             success: false,
             msg: e.message
         }
         res.send(response);
+        logger(path_to_err_logs, 'ERROR WITH GETTING USER: ' + e.message);
+        logger(path_to_logs, '-----------------------------GET USER IS CRASHED-------------------------');
     }
 }
