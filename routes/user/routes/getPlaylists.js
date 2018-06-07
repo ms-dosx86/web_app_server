@@ -2,6 +2,7 @@ const User = require('../../../models/user').UserModel;
 const Playlist = require('../../../models/playlist').PlaylistModel;
 const logger = require('../../../functions/logger');
 const path_to_err_logs = require('../../../config').path_to_err_logs;
+const path_to_logs = require('../../../config').path_to_logs;
 
 module.exports = async (req, res) => {
     try {
