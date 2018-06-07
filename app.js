@@ -1,28 +1,27 @@
+const logger = require('./functions/logger');
+const path_to_logs = require('./config').path_to_logs;
+const path_to_err_logs = require('./config').path_to_err_logs;
+//зависимости
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const path = require('path');
+const clean_dir = require('./functions/clean_dir');
+const fs = require('fs');
+//зависимости 2
+const config = require('./config');
+const user = require('./routes/user/user_route');
+const playlist = require('./routes/playlist/playlist_route');
+const search = require('./routes/search/search_route');
+const tag = require('./routes/tag/tag_route');
+const home = require('./routes/home/home_route');
+const statistics = require('./routes/statistics/statistic_route');
+//переменные
+const app = express();
+const port = 3000;
 (async () => {
     try {
-        //зависимости
-        const express = require('express');
-        const bodyParser = require('body-parser');
-        const cors = require('cors');
-        const mongoose = require('mongoose');
-        const path = require('path');
-        const clean_dir = require('./functions/clean_dir');
-        const fs = require('fs');
-        const logger = require('./functions/logger');
-        const path_to_logs = require('./config').path_to_logs;
-        const path_to_err_logs = require('./config').path_to_err_logs;
-
-        //зависимости 2
-        const config = require('./config');
-        const user = require('./routes/user/user_route');
-        const playlist = require('./routes/playlist/playlist_route');
-        const search = require('./routes/search/search_route');
-        const tag = require('./routes/tag/tag_route');
-        const home = require('./routes/home/home_route');
-        //переменные
-        const app = express();
-        const port = 3000;
-
         //middleware
         app.use(cors());
         app.use(bodyParser.urlencoded({ extended: false }));
@@ -35,8 +34,13 @@
         app.use('/api/playlist', playlist);
         app.use('/api/search', search);
         app.use('/api/home', home);
+        app.use('/api/statistics', statistics);
         //clean logs
         fs.writeFile('logs/logs.txt', '', err => {
+            if (err) throw err;
+        });
+        //clean err logs
+        fs.writeFile('logs/err_logs.txt', '', err => {
             if (err) throw err;
         });
         //clean temp files
@@ -44,7 +48,7 @@
         //connect to db
         await mongoose.connect(config.database);
         logger(path_to_logs, 'connected to database');
-        await app.listen(port);
+        await app.listen(port, '127.0.0.1');
         logger(path_to_logs, 'port ' + port + ' is listened');
         console.log('now server is running');
     } catch(e) {
