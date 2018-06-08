@@ -12,10 +12,10 @@ module.exports = async (req, res) => {
         let page = req.params.page;
         let playlists = [];
         let pages = 0;
-        if (user.favs) {
+        if (user.favs[0]) {
             let i = user.favs.length - page*10 - 1;
             pages = (user.favs.length / 10).toFixed();
-            while (playlists.length < 10 && i > 0) {
+            while (playlists.length < 10 && i >= 0) {
                 playlists.push(user.favs[i]);
                 i--;
             }
