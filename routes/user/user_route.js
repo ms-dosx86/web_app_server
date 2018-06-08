@@ -13,6 +13,8 @@ const updateLogin = require('./routes/updateLogin');
 const updateEmail = require('./routes/updateEmail');
 const updateStatus = require('./routes/updateStatus');
 const getUserByLogin = require('./routes/getUserByLogin');
+const inFav = require('./routes/inFav');
+const addToFavs = require('./routes/addToFavs');
 
 router.post('/reg', registration);
 router.post('/auth', auth);
@@ -27,4 +29,6 @@ router.post('/updateLogin', updateLogin);
 router.post('/updateEmail', updateEmail);
 router.post('/updateStatus', updateStatus);
 router.get('/getUserByLogin/:login', getUserByLogin);
+router.get('/inFavs/:user_id/:playlist_id', inFav);
+router.post('/addToFavs/:id', addToFavs);
 module.exports = router;
