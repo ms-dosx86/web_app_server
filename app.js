@@ -17,6 +17,7 @@ const search = require('./routes/search/search_route');
 const tag = require('./routes/tag/tag_route');
 const home = require('./routes/home/home_route');
 const statistics = require('./routes/statistics/statistic_route');
+const create_file_dir = require('./functions/create_file_dir');
 //переменные
 const app = express();
 const port = 3000;
@@ -43,6 +44,7 @@ const port = 3000;
         fs.writeFile('logs/err_logs.txt', '', err => {
             if (err) throw err;
         });
+        await create_file_dir();
         //clean temp files
         await clean_dir(__dirname + '/files/temp');
         //connect to db
