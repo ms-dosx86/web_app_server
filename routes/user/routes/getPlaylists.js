@@ -7,7 +7,12 @@ const path_to_logs = require('../../../config').path_to_logs;
 module.exports = async (req, res) => {
     try {
         logger(path_to_logs, '-----------------------------GETTING USERS\' PLAYLISTS-------------------------');
-        let user = await User.findById(req.params.id);
+        let user = null;
+        if (req.params.way == 'id') {
+            user = await User.findById(req.params.identificator);
+        } else {
+            user = await User.findOne({ login: req.params.identificator });
+        }
         if (user === null) throw new Error('нет такого пользователя');
         let page = req.params.page;
         let playlists = [];
