@@ -1,4 +1,3 @@
-node_modules
+node_modules/
 files/
-logs/logs.txt
-logs/err_logs.txt
+*.txt
