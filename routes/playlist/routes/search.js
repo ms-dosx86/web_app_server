@@ -46,7 +46,7 @@ module.exports = async (req, res) => {
             }
         }
         for (let i = 0; i < p.length; i++) {
-            p[i].sort((a, b) => b.viewCount - a.viewCount);
+            p[i].sort((a, b) => a.viewCount - b.viewCount);
         }
         let ps = [];
         p.reverse();
