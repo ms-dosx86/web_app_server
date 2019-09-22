@@ -20,7 +20,7 @@ async function bootstrap() {
 
   await app.listen(PORT);
   console.log(`server started at http://localhost:${PORT}`);
-  await connect('mongodb://localhost:27017/test', { useNewUrlParser: true,  useUnifiedTopology: true  });
+  await connect('mongodb://localhost:27017/test', { useNewUrlParser: true,  useUnifiedTopology: true, useCreateIndex: true, });
   console.log('connected to database');
 }
 
