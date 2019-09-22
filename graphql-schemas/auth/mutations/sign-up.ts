@@ -40,6 +40,9 @@ export const singUpMutation = {
 }
 
 async function resolve(prevObj: unknown, args: SignUpArgs): Promise<LoginResponse> {
+  if (args.password.length < 3 || args.password.length > 50) {
+    throw new Error('Password length must be in range 3-50');
+  }
   const password = await hashPassword(args.password);
   const user = new User({
     email: args.email,
