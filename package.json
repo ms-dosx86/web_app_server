@@ -19,10 +19,17 @@
   },
   "homepage": "https://github.com/ms-dosx86/web_app_server#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^14.5.7",
+    "graphql-type-long": "^0.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.1",
+    "@types/graphql": "^14.5.0",
+    "@types/mongoose": "^5.5.17",
     "@types/node": "^12.7.5",
     "nodemon": "^1.19.2",
     "ts-loader": "^6.1.2",
