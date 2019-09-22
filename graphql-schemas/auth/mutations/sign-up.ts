@@ -4,7 +4,7 @@ import * as GraphQLLong from 'graphql-type-long';
 import { SignUpArgs } from "../models/sign-up-args"
 import { User } from "../../../mongoose-schemas";
 import { sign } from "../../../jwt";
-import { LoginResponse } from "../../../core";
+import { LoginResponse, hashPassword } from "../../../core";
 
 const signUpType = new GraphQLObjectType({
   name: 'SingUpType',
@@ -40,9 +40,10 @@ export const singUpMutation = {
 }
 
 async function resolve(prevObj: unknown, args: SignUpArgs): Promise<LoginResponse> {
+  const password = await hashPassword(args.password);
   const user = new User({
     email: args.email,
-    password: args.password,
+    password,
     username: args.username,
   });
   await user.save();
