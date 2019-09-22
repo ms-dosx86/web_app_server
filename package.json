@@ -1,0 +1,35 @@
+{
+  "name": "web_app_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack",
+    "dev": "nodemon build/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ms-dosx86/web_app_server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ms-dosx86/web_app_server/issues"
+  },
+  "homepage": "https://github.com/ms-dosx86/web_app_server#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.1",
+    "@types/node": "^12.7.5",
+    "nodemon": "^1.19.2",
+    "ts-loader": "^6.1.2",
+    "typescript": "^3.6.3",
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.9",
+    "webpack-node-externals": "^1.7.2",
+    "webpack-shell-plugin": "^0.5.0"
+  }
+}
