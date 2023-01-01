@@ -33,10 +33,10 @@
     "@types/mongoose": "^5.5.17",
     "@types/node": "^12.7.5",
     "nodemon": "^1.19.2",
-    "ts-loader": "^6.1.2",
+    "ts-loader": "^9.4.2",
     "typescript": "^3.6.3",
-    "webpack": "^4.40.2",
-    "webpack-cli": "^3.3.9",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
     "webpack-node-externals": "^1.7.2",
     "webpack-shell-plugin": "^0.5.0"
   }
